@@ -26,7 +26,7 @@ function Navbar() {
         
         {/* Left: Logo */}
         <div className="flex flex-row items-center gap-3">
-         <Link to ='/'><img src={assets.logo} className="flex w-15 h-5" /></Link> 
+          <Link to="/"><img src={assets.logo} className="flex w-15 h-5" alt="Logo" /></Link> 
         </div>
 
         {/* Middle: Navbar Links (Desktop Only) */}
@@ -36,10 +36,9 @@ function Navbar() {
               key={item}
               to={`/${item === "Home" ? "" : item.toLowerCase()}`}
               className="relative flex items-center hover:text-gray-700 transition-all whitespace-nowrap no-underline text-black"
-              style={{ textDecoration: "none" }} // Prevent underline
+              style={{ textDecoration: "none" }}
             >
               {item}
-              <span className="w-full h-[2px] bg-black scale-x-0 transition-transform duration-300 hover:scale-x-100"></span>
             </NavLink>
           ))}
         </div>
@@ -99,29 +98,20 @@ function Navbar() {
           </button>
         </div>
 
-        {/* Sidebar Links */}
+        {/* Sidebar Links (Styled like Navbar Links) */}
         <ul className="flex flex-col px-6 py-4 text-black text-lg font-medium">
           {["Home", "Collection", "About", "Contact"].map((item) => (
             <NavLink
               key={item}
               to={`/${item === "Home" ? "" : item.toLowerCase()}`}
-              className="flex items-center gap-3 py-3 hover:text-gray-700 transition-all no-underline text-black"
+              className="py-4 border-b border-gray-200 text-center hover:bg-gray-100 transition-all no-underline text-black"
               style={{ textDecoration: "none" }}
               onClick={() => setMenuOpen(false)}
             >
-              <img src={assets.dropdown_icon} className="w-5 h-5" alt="Dropdown Icon" />
               {item}
             </NavLink>
           ))}
         </ul>
-
-        {/* Back Button */}
-        <button 
-          className="w-full py-3 text-center text-white bg-gray-800 hover:bg-gray-900 transition-all"
-          onClick={() => setMenuOpen(false)}
-        >
-          Back
-        </button>
       </div>
 
       {/* Overlay to close menu when clicking outside */}
