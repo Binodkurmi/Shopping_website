@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { assets } from "../assets/assets";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import "../index.css";
 
@@ -26,7 +26,7 @@ function Navbar() {
         
         {/* Left: Logo */}
         <div className="flex flex-row items-center gap-3">
-          <img src={assets.logo} className="flex w-15 h-5" />
+         <Link to ='/'><img src={assets.logo} className="flex w-15 h-5" /></Link> 
         </div>
 
         {/* Middle: Navbar Links (Desktop Only) */}
