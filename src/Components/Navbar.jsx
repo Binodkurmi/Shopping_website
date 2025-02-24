@@ -2,16 +2,19 @@ import React, { useState, useRef, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
-import "../index.css";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const sidebarRef = useRef(null);
   const profileRef = useRef(null);
 
-  // Close dropdown when clicking outside
+  // Close sidebar/profile when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setProfileOpen(false);
       }
@@ -22,12 +25,12 @@ function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
-      <div className="container mx-auto px-6 py-4 w-full flex items-center justify-between">
+      <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         
         {/* Left: Logo */}
-        <div className="flex flex-row items-center gap-3">
-          <Link to="/"><img src={assets.logo} className="flex w-15 h-5" alt="Logo" /></Link> 
-        </div>
+        <Link to="/">
+          <img src={assets.logo} className="w-20 h-8" alt="Logo" />
+        </Link>
 
         {/* Middle: Navbar Links (Desktop Only) */}
         <div className="hidden md:flex items-center gap-8 text-black text-sm font-medium">
@@ -35,17 +38,20 @@ function Navbar() {
             <NavLink
               key={item}
               to={`/${item === "Home" ? "" : item.toLowerCase()}`}
-              className="relative flex items-center hover:text-gray-700 transition-all whitespace-nowrap no-underline text-black"
-              style={{ textDecoration: "none" }}
+							style={{ textDecoration: "none" }}
+              className="hover:text-gray-700 transition-all  text-black no-underline"
             >
               {item}
             </NavLink>
           ))}
         </div>
 
-        {/* Right: Icons */}
+        {/* Right: Icons & Mobile Menu Button */}
         <div className="flex items-center gap-6">
-          <img src={assets.search_icon} className="w-4 h-4 cursor-pointer" alt="Search" />
+          {/* Search Icon */}
+          {assets.search_icon && (
+            <img src={assets.search_icon} className="w-5 h-5 cursor-pointer" alt="Search" />
+          )}
 
           {/* Profile Dropdown */}
           <div 
@@ -54,12 +60,14 @@ function Navbar() {
             onMouseEnter={() => setProfileOpen(true)}
             onMouseLeave={() => setProfileOpen(false)}
           >
-            <img
-              src={assets.profile_icon}
-              className="w-4 h-4 cursor-pointer"
-              alt="Profile"
-              onClick={() => setProfileOpen(!profileOpen)}
-            />
+            {assets.profile_icon && (
+              <img
+                src={assets.profile_icon}
+                className="w-5 h-5 cursor-pointer"
+                alt="Profile"
+                onClick={() => setProfileOpen(!profileOpen)}
+              />
+            )}
             {profileOpen && (
               <div className="absolute right-0 mt-2 w-32 bg-white shadow-lg rounded-md">
                 <div className="flex flex-col gap-2 w-36 py-5 bg-slate-100 text-black rounded">
@@ -72,40 +80,44 @@ function Navbar() {
           </div>
 
           {/* Cart Icon */}
-          <NavLink to="/cart" className="relative no-underline text-black" style={{ textDecoration: "none" }}>
-            <img src={assets.cart_icon} className="w-4 h-4 cursor-pointer" alt="Cart" />
+          <NavLink to="/cart" className="relative text-black no-underline">
+            {assets.cart_icon && (
+              <img src={assets.cart_icon} className="w-5 h-5 cursor-pointer" alt="Cart" />
+            )}
             <p className="absolute right-[-5px] bottom-[-5px] w-3 h-3 flex items-center justify-center bg-black text-white text-xs font-bold rounded-full">
               5
             </p>
           </NavLink>
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden text-2xl text-black" onClick={() => setMenuOpen(true)}>
+          <button className="md:hidden text-2xl text-black no-underline" onClick={() => setMenuOpen(true)}>
             <FaBars />
           </button>
         </div>
       </div>
 
       {/* Mobile Sidebar Menu */}
-      <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform ${menuOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out z-50`}
-      >
+			<div
+				ref={sidebarRef}
+				className={`fixed top-0 left-0 h-[300px] w-32 bg-white shadow-lg transform ${
+					menuOpen ? "translate-x-0" : "-translate-x-full"
+				} transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}
+			>
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b">
+        <div className="flex items-center justify-between px-4 py-3 border-b">
           <span className="text-lg font-bold text-black">Menu</span>
-          <button className="text-2xl text-black" onClick={() => setMenuOpen(false)}>
+          <button className="text-xl text-black" onClick={() => setMenuOpen(false)}>
             <FaTimes />
           </button>
         </div>
 
-        {/* Sidebar Links (Styled like Navbar Links) */}
-        <ul className="flex flex-col px-6 py-4 text-black text-lg font-medium">
+        {/* Sidebar Links */}
+        <ul className="flex flex-col px-4 py-4 text-black text-lg font-medium">
           {["Home", "Collection", "About", "Contact"].map((item) => (
             <NavLink
               key={item}
               to={`/${item === "Home" ? "" : item.toLowerCase()}`}
-              className="py-4 border-b border-gray-200 text-center hover:bg-gray-100 transition-all no-underline text-black"
-              style={{ textDecoration: "none" }}
+              className="py-2 hover:text-gray-700 transition-all no-underline text-black"
               onClick={() => setMenuOpen(false)}
             >
               {item}
@@ -113,14 +125,6 @@ function Navbar() {
           ))}
         </ul>
       </div>
-
-      {/* Overlay to close menu when clicking outside */}
-      {menuOpen && (
-        <div 
-          className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40"
-          onClick={() => setMenuOpen(false)}
-        ></div>
-      )}
     </nav>
   );
 }
