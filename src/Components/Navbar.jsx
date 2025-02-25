@@ -29,7 +29,7 @@ function Navbar() {
         
         {/* Left: Logo */}
         <Link to="/">
-          <img src={assets.logo} className="w-20 h-8" alt="Logo" />
+          <img src={assets.logo} className="w-15 h-5" alt="Logo" />
         </Link>
 
         {/* Middle: Navbar Links (Desktop Only) */}

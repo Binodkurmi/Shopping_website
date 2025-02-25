@@ -4,12 +4,12 @@ import { assets } from '../assets/assets';
 function Footer() {
 	return (
 		<div className='bg-gray-100 py-10'>
-			<div className='container mx-auto px-6 md:px-16'>
+			<div className='container mx-auto px-1 md:px-16'>
 				<div className='flex flex-col md:flex-row justify-between items-start gap-10'>
 
 					{/* Left Section - Logo & Description */}
 					<div className='w-full md:w-1/3'>
-						<img src={assets.logo} className='mb-5 w-32' alt="Logo" />
+						<img src={assets.logo} className='mb-5 w-15' alt="Logo" />
 						<p className='text-gray-600'>
 							Your one-stop destination for premium products at unbeatable prices. Explore our latest collections and enjoy a seamless shopping experience with fast delivery and top-notch customer support.
 						</p>
@@ -40,11 +40,12 @@ function Footer() {
 			</div>
 
 			{/* Footer Bottom Section */}
-			<div className='mt-10 border-t border-gray-300'>
-				<p className='py-2 text-sm text-center text-gray-600'>
+			<div className='border-t border-gray-300'>
+				<p className='py-2 text-sm text-center tracking-wide leading-6 text-gray-600'>
 					Copyright © 2025 Forever.com - All Rights Reserved.
 				</p>
 			</div>
+
 		</div>
 	);
 }
