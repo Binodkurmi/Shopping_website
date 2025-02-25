@@ -2,10 +2,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 
-// Importing Components
 import Navbar from './Components/Navbar';
 
-// Importing Pages
+
 import Home from './Pages/Home';
 import Collection from './Pages/Collection';
 import About from './Pages/About';
