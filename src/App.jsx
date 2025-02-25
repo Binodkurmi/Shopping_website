@@ -14,6 +14,7 @@ import Cart from './Pages/Cart';
 import Login from './Pages/Login';
 import PlaceOrder from './Pages/PlaceOrder';
 import Orders from './Pages/Orders';
+import Footer from './Components/Footer';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/PlaceOrder" element={<PlaceOrder />} />
         <Route path="/Orders" element={<Orders />} />
       </Routes>
+			<Footer/>
     </div>
   );
 }
