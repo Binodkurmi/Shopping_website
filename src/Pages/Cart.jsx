@@ -23,13 +23,6 @@ const Cart = () => {
     setCartData(tempData);
   }, [cartItems]);
 
-  // Function to handle quantity change
-  const handleQuantityChange = (index, value) => {
-    const updatedCart = [...cartData];
-    updatedCart[index].quantity = value; // Update quantity
-    setCartData(updatedCart);
-  };
-
   return (
     <div className="border-t pt-20">
       <div className="text-3xl mb-3">
@@ -57,13 +50,17 @@ const Cart = () => {
                 </div>
               </div>
 
-              {/* ✅ Input for Quantity */}
+              {/* ✅ Fixed Input for Quantity */}
               <input
                 className="border max-w-10 px-1 sm:px-2 py-1"
                 type="number"
                 min={1}
                 value={item.quantity} // ✅ Controlled Component
-                onChange={(e) = e.target.value === '' || e.tarfet.value === '0' ? null: updatedQuantity(item._id,item.size, Number(e.target))}
+                onChange={(e) => {
+                  const value = e.target.value.trim(); // Remove spaces
+                  if (value === '' || value === '0') return; // Prevent empty or zero
+                  updatedQuantity(item._id, item.size, Number(value));
+                }}
               />
 
               {/* ✅ Bin Icon to Remove Item */}
