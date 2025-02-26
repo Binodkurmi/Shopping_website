@@ -9,49 +9,60 @@ const ShopContextProvider = (props) => {
   const delivery_fee = 10;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);  
-   const [cartItems, setCartItems] = useState({});
+  const [cartItems, setCartItems] = useState({});
 
+  // ✅ Function to add items to cart
+  const addToCart = async (itemId, size) => {
+    if (!size) {
+      toast.error("Select Product Size");
+      return;
+    }
 
-   const addToCart = async (itemId,size)=>{
+    let cartData = structuredClone(cartItems);
 
-		if(!size){
-			toast.error('Select Product Size')
-			return;
-		}
+    if (cartData[itemId]) {
+      if (cartData[itemId][size]) {
+        cartData[itemId][size] += 1;
+      } else {
+        cartData[itemId][size] = 1;
+      }
+    } else {
+      cartData[itemId] = {};
+      cartData[itemId][size] = 1;
+    }
 
-			let cartData = structuredClone(cartItems);
+    setCartItems(cartData);
+  };
 
-			if(cartData[itemId]){
-				if(cartData[itemId] [size]){
-					cartData[itemId][size] +=1;
-				}
-				else{
-					cartData[itemId][size] =1;
-				}
-			}
-			else{
-				cartData[itemId]= {};
-				cartData[itemId][size] =1;
-			}
-			setCartItems(cartData);
+  // ✅ Function to get cart item count
+  const getCartCount = () => {
+    let totalCount = 0;
+    for (const item in cartItems) {
+      for (const size in cartItems[item]) {
+        if (cartItems[item][size] > 0) {
+          totalCount += cartItems[item][size];
+        }
+      }
+    }
+    return totalCount;
+  };
 
+  // ✅ Updated function to change quantity and delete items
+  const updatedQuantity = async (itemId, size, quantity) => {
+    let cartData = structuredClone(cartItems);
 
-		 }
-		 const getCartCount = () => {
-			let totalCount = 0;
-			for (const item in cartItems) {
-				for (const size in cartItems[item]) {  // Use 'size' instead of 'item2'
-					try {
-						if (cartItems[item][size] > 0) {  // Correctly reference 'size'
-							totalCount += cartItems[item][size];
-						}
-					} catch (error) {
-						console.error("Error in getCartCount:", error);
-					}
-				}
-			}
-			return totalCount;
-		};
+    if (quantity > 0) {
+      cartData[itemId][size] = quantity;
+    } else {
+      delete cartData[itemId][size]; // ✅ Remove size from cart
+
+      if (Object.keys(cartData[itemId]).length === 0) {
+        delete cartData[itemId]; // ✅ Remove product if no sizes remain
+      }
+    }
+
+    setCartItems(cartData);
+  };
 
   const value = {
     products,
@@ -61,7 +72,10 @@ const ShopContextProvider = (props) => {
     setSearch,
     showSearch,
     setShowSearch, 
-		cartItems,addToCart,getCartCount
+    cartItems,
+    addToCart,
+    getCartCount,
+    updatedQuantity,
   };
 
   return (
