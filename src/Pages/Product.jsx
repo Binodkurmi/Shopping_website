@@ -113,7 +113,7 @@ const Product = () => {
 
           {/** Add to Cart Button (Margin Removed) */}
           <button
-            onClick={handleAddToCart}
+            onClick={()=>addToCart(productData._id,size)}
             className="bg-gray-900 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded transition-all duration-200">
             Add to Cart
           </button>
@@ -138,6 +138,7 @@ const Product = () => {
 				</div>
 			</div>
 			{/** Display related Products */}
+
 			<RelatedProducts category={productData.category} subCategory={productData.subCategory}/>
     </div>
   ) : (

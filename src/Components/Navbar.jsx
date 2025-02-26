@@ -4,13 +4,13 @@ import { Link, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { ShopContext } from "../Context/ShopContext";
 
-function Navbar() {
+const  Navbar=()=> {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const sidebarRef = useRef(null);
   const profileRef = useRef(null);
   
-	const {setShowSearch}= useContext(ShopContext)
+	const {setShowSearch, getCartCount}= useContext(ShopContext)
 
   // Close sidebar/profile when clicking outside
   useEffect(() => {
@@ -86,8 +86,7 @@ function Navbar() {
             {assets.cart_icon && (
               <img src={assets.cart_icon} className="w-5 h-5 cursor-pointer" alt="Cart" />
             )}
-            <p className="absolute right-[-5px] bottom-[-5px] w-3 h-3 flex items-center justify-center bg-black text-white text-xs font-bold rounded-full">
-              5
+            <p className="absolute right-[-5px] bottom-[-5px] w-3 h-3 flex items-center justify-center bg-black text-white text-xs font-bold rounded-full">{getCartCount(0)}
             </p>
           </NavLink>
 
