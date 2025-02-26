@@ -1,13 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback, useContext } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { ShopContext } from "../Context/ShopContext";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const sidebarRef = useRef(null);
   const profileRef = useRef(null);
+  
+	const {setShowSearch}= useContext(ShopContext)
 
   // Close sidebar/profile when clicking outside
   useEffect(() => {
@@ -48,9 +51,8 @@ function Navbar() {
 
         {/* Right: Icons & Mobile Menu Button */}
         <div className="flex items-center gap-6">
-          {/* Search Icon */}
           {assets.search_icon && (
-            <img src={assets.search_icon} className="w-5 h-5 cursor-pointer" alt="Search" />
+            <img onClick={()=>setShowSearch(true)} src={assets.search_icon} className="w-5 h-5 cursor-pointer" alt="Search" />
           )}
 
           {/* Profile Dropdown */}
