@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import { products } from "../assets/assets";
 import { toast } from "react-toastify";
 
@@ -8,11 +8,11 @@ const ShopContextProvider = (props) => {
   const currency = "$";
   const delivery_fee = 10;
   const [search, setSearch] = useState("");
-  const [showSearch, setShowSearch] = useState(false);  
+  const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
 
-  // ✅ Function to add items to cart
-  const addToCart = async (itemId, size) => {
+  // ✅ Add item to cart
+  const addToCart = (itemId, size) => {
     if (!size) {
       toast.error("Select Product Size");
       return;
@@ -21,48 +21,62 @@ const ShopContextProvider = (props) => {
     let cartData = structuredClone(cartItems);
 
     if (cartData[itemId]) {
-      if (cartData[itemId][size]) {
-        cartData[itemId][size] += 1;
-      } else {
-        cartData[itemId][size] = 1;
-      }
+      cartData[itemId][size] = (cartData[itemId][size] || 0) + 1;
     } else {
-      cartData[itemId] = {};
-      cartData[itemId][size] = 1;
+      cartData[itemId] = { [size]: 1 };
     }
 
     setCartItems(cartData);
   };
 
-  // ✅ Function to get cart item count
+  // ✅ Get total cart count
   const getCartCount = () => {
     let totalCount = 0;
     for (const item in cartItems) {
       for (const size in cartItems[item]) {
-        if (cartItems[item][size] > 0) {
-          totalCount += cartItems[item][size];
-        }
+        totalCount += cartItems[item][size];
       }
     }
     return totalCount;
   };
 
-  // ✅ Updated function to change quantity and delete items
-  const updatedQuantity = async (itemId, size, quantity) => {
+  // ✅ Update quantity and delete items
+  const updatedQuantity = (itemId, size, quantity) => {
     let cartData = structuredClone(cartItems);
 
     if (quantity > 0) {
       cartData[itemId][size] = quantity;
     } else {
-      delete cartData[itemId][size]; // ✅ Remove size from cart
+      delete cartData[itemId][size];
 
       if (Object.keys(cartData[itemId]).length === 0) {
-        delete cartData[itemId]; // ✅ Remove product if no sizes remain
+        delete cartData[itemId];
       }
     }
 
     setCartItems(cartData);
   };
+
+  // ✅ Get total cart amount
+	const getCartAmount = () => {
+		let totalAmount = 0;
+	
+
+		for (const itemId in cartItems) {
+			let itemInfo = products.find((product) => product._id === Number(itemId));
+			if (!itemInfo) continue;
+	 
+			for (const size in cartItems[itemId]) {
+				try {
+					totalAmount += itemInfo.price * cartItems[itemId][size];
+				} catch (error) {
+					console.error("Error calculating total:", error);
+				}
+			}
+		}
+	
+		return totalAmount || 0; // ✅ Always return a valid number
+	};
 
   const value = {
     products,
@@ -71,11 +85,12 @@ const ShopContextProvider = (props) => {
     search,
     setSearch,
     showSearch,
-    setShowSearch, 
+    setShowSearch,
     cartItems,
     addToCart,
     getCartCount,
     updatedQuantity,
+    getCartAmount,
   };
 
   return (

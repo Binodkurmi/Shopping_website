@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Title from '../Components/Title';
 import { ShopContext } from '../Context/ShopContext';
 import { assets } from '../assets/assets';
+import CartTotal from '../Components/CartTotal';
 
 const Cart = () => {
   const { products, currency, cartItems, updatedQuantity } = useContext(ShopContext);
@@ -36,11 +37,11 @@ const Cart = () => {
           return (
             <div
               key={index}
-              className="py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4"
+              className="py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4"
             >
+              {/* Product Image and Details */}
               <div className="flex items-start gap-6">
                 <img className="w-16 sm:w-20" src={productData.image[0]} alt={productData.name} />
-
                 <div>
                   <p className="text-xs sm:text-lg font-medium">{productData.name}</p>
                   <div className="flex items-center gap-5 mt-2">
@@ -50,29 +51,36 @@ const Cart = () => {
                 </div>
               </div>
 
-              {/* ✅ Fixed Input for Quantity */}
+              {/* Quantity Input */}
               <input
-                className="border max-w-10 px-1 sm:px-2 py-1"
+                className="border max-w-10 px-1 sm:px-2 py-1 text-center"
                 type="number"
                 min={1}
-                value={item.quantity} // ✅ Controlled Component
+                value={item.quantity}
                 onChange={(e) => {
-                  const value = e.target.value.trim(); // Remove spaces
-                  if (value === '' || value === '0') return; // Prevent empty or zero
+                  const value = e.target.value.trim();
+                  if (value === '' || value === '0') return;
                   updatedQuantity(item._id, item.size, Number(value));
                 }}
               />
 
-              {/* ✅ Bin Icon to Remove Item */}
-              <img 
-                onClick={() => updatedQuantity(item._id, item.size, 0)} 
-                className="w-4 mr-4 sm:w-5 cursor-pointer" 
-                src={assets.bin_icon} 
-                alt="Delete"
-              />
+              {/* Bin Icon - Properly Aligned */}
+              <div className="flex justify-center">
+                <img
+                  onClick={() => updatedQuantity(item._id, item.size, 0)}
+                  className="w-4 sm:w-5 cursor-pointer"
+                  src={assets.bin_icon}
+                  alt="Delete"
+                />
+              </div>
             </div>
           );
         })}
+				</div>
+				<div className='flex justify-end my-20'>
+					<div className='w-full sm:w-[450px]'>
+						<CartTotal/>
+					</div>
       </div>
     </div>
   );

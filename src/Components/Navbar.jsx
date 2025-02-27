@@ -1,16 +1,15 @@
-import React, { useState, useRef, useEffect, useCallback, useContext } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { ShopContext } from "../Context/ShopContext";
 
-const  Navbar=()=> {
+const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const sidebarRef = useRef(null);
   const profileRef = useRef(null);
-  
-	const {setShowSearch, getCartCount}= useContext(ShopContext)
+  const { setShowSearch, getCartCount } = useContext(ShopContext);
 
   // Close sidebar/profile when clicking outside
   useEffect(() => {
@@ -41,8 +40,12 @@ const  Navbar=()=> {
             <NavLink
               key={item}
               to={`/${item === "Home" ? "" : item.toLowerCase()}`}
-							style={{ textDecoration: "none" }}
-              className="hover:text-gray-700 transition-all  text-black no-underline"
+              style={{ textDecoration: "none" }}
+              className={({ isActive }) =>
+                `hover:text-gray-700 transition-all text-black no-underline ${
+                  isActive ? "font-bold border-b-2 border-black" : ""
+                }`
+              }
             >
               {item}
             </NavLink>
@@ -51,8 +54,9 @@ const  Navbar=()=> {
 
         {/* Right: Icons & Mobile Menu Button */}
         <div className="flex items-center gap-6">
+          {/* Search Icon */}
           {assets.search_icon && (
-            <img onClick={()=>setShowSearch(true)} src={assets.search_icon} className="w-5 h-5 cursor-pointer" alt="Search" />
+            <img onClick={() => setShowSearch(true)} src={assets.search_icon} className="w-5 h-5 cursor-pointer" alt="Search" />
           )}
 
           {/* Profile Dropdown */}
@@ -86,7 +90,8 @@ const  Navbar=()=> {
             {assets.cart_icon && (
               <img src={assets.cart_icon} className="w-5 h-5 cursor-pointer" alt="Cart" />
             )}
-            <p className="absolute right-[-5px] bottom-[-5px] w-3 h-3 flex items-center justify-center bg-black text-white text-xs font-bold rounded-full">{getCartCount(0)}
+            <p className="absolute right-[-5px] bottom-[-5px] w-3 h-3 flex items-center justify-center bg-black text-white text-xs font-bold rounded-full">
+              {getCartCount()}
             </p>
           </NavLink>
 
@@ -97,13 +102,18 @@ const  Navbar=()=> {
         </div>
       </div>
 
+      {/* Mobile Sidebar Overlay */}
+      {menuOpen && (
+        <div className="fixed inset-0 bg-black opacity-40 z-40" onClick={() => setMenuOpen(false)}></div>
+      )}
+
       {/* Mobile Sidebar Menu */}
-			<div
-				ref={sidebarRef}
-				className={`fixed top-0 left-0 h-[300px] w-32 bg-white shadow-lg transform ${
-					menuOpen ? "translate-x-0" : "-translate-x-full"
-				} transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}
-			>
+      <div
+        ref={sidebarRef}
+        className={`fixed top-0 left-0 h-[300px] w-40 bg-white shadow-lg transform ${
+          menuOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}
+      >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b">
           <span className="text-lg font-bold text-black">Menu</span>
@@ -118,7 +128,12 @@ const  Navbar=()=> {
             <NavLink
               key={item}
               to={`/${item === "Home" ? "" : item.toLowerCase()}`}
-              className="py-2 hover:text-gray-700 transition-all no-underline text-black"
+              style={{ textDecoration: "none" }}
+              className={({ isActive }) =>
+                `py-2 hover:text-gray-700 transition-all text-black no-underline ${
+                  isActive ? "font-bold border-b-2 border-black" : ""
+                }`
+              }
               onClick={() => setMenuOpen(false)}
             >
               {item}
@@ -128,6 +143,6 @@ const  Navbar=()=> {
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
