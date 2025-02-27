@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import { products } from "../assets/assets";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export const ShopContext = createContext();
 
@@ -10,6 +11,8 @@ const ShopContextProvider = (props) => {
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
+  const navigate =useNavigate();
+
 
   // ✅ Add item to cart
   const addToCart = (itemId, size) => {
@@ -57,15 +60,21 @@ const ShopContextProvider = (props) => {
     setCartItems(cartData);
   };
 
-  // ✅ Get total cart amount
+  
 	const getCartAmount = () => {
+	// ✅ Debug cart items here
+	
 		let totalAmount = 0;
 	
-
 		for (const itemId in cartItems) {
-			let itemInfo = products.find((product) => product._id === Number(itemId));
-			if (!itemInfo) continue;
-	 
+			let itemInfo = products.find((product) => String(product._id) === String(itemId));
+
+			
+			if (!itemInfo) {
+				console.log(`Product not found for itemId: ${itemId}`); // ✅ Debug missing products
+				continue;
+			}
+	
 			for (const size in cartItems[itemId]) {
 				try {
 					totalAmount += itemInfo.price * cartItems[itemId][size];
@@ -75,8 +84,11 @@ const ShopContextProvider = (props) => {
 			}
 		}
 	
-		return totalAmount || 0; // ✅ Always return a valid number
+		console.log("Calculated Subtotal in getCartAmount:", totalAmount); // ✅ See if this updates
+	
+		return totalAmount || 0; // Always return a valid number
 	};
+	
 
   const value = {
     products,
@@ -91,6 +103,7 @@ const ShopContextProvider = (props) => {
     getCartCount,
     updatedQuantity,
     getCartAmount,
+		navigate,
   };
 
   return (
