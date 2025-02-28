@@ -61,18 +61,18 @@ const Navbar = () => {
 
           {/* Profile Dropdown */}
           <div 
-            className="relative" 
+            className="group relative" 
             ref={profileRef}
             onMouseEnter={() => setProfileOpen(true)}
             onMouseLeave={() => setProfileOpen(false)}
           >
             {assets.profile_icon && (
-              <img
+             <Link to="/Login"> <img
                 src={assets.profile_icon}
                 className="w-5 h-5 cursor-pointer"
                 alt="Profile"
                 onClick={() => setProfileOpen(!profileOpen)}
-              />
+              /></Link>
             )}
             {profileOpen && (
               <div className="absolute right-0 mt-2 w-32 bg-white shadow-lg rounded-md">

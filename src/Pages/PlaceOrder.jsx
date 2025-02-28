@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import Title from '../Components/Title'
+import CartTotal from '../Components/CartTotal';
+import { assets } from '../assets/assets';
+import { ShopContext } from '../Context/ShopContext';
 
 const  PlaceOrder =() => {
+const [method, setMethod] = useState('cod');
+const {navigate} = useContext(ShopContext);
+
+
 	return (
-		<div className='flex flex-col sm:flex-row justify-between gap-4 pt-20 sm:pt-14 min-h-[80vh] border-t'>
-			<div className='flex flex-col gap-4 w-full sm:max-w-[480px]'>
+		<div className='flex flex-col sm:flex-row justify-between gap-4 pt-30 sm:pt-14 min-h-[80vh] border-t'>
+			<div className='flex flex-col pb-7 gap-4 w-full sm:max-w-[480px]'>
 					<div className="text-xl sm:text-2xl my-3 flex gap-2">
 			<Title text1={"DELIVERY"} text2={"INFORMATION"} />
 		</div>
@@ -26,6 +33,40 @@ const  PlaceOrder =() => {
 			</div>
       {/*** --------Right Side---------- */}
 
+			<div className='mt-8 '>
+				<div className='mt-8 min-w-8'>
+					<CartTotal/>
+				</div>
+				<div className='mt-12'>
+					<Title text1={'PAYMENT'} text2={'METHOD'}/>
+
+
+					<div className='flex pb-5 gap-3 flex-col lg:flex-row'>
+					<div className="flex flex-col gap-2">
+						{/* Stripe */}
+						<div  onClick={() => setMethod('googlePay')} className="flex items-center gap-3 border p-2 px-4 cursor-pointer hover:bg-gray-100 rounded-lg">
+							<p className={`w-4 h-4 border rounded-full ${method === "googlePay" ?'bg-green-400': '' }`}></p>
+							<img className="h-4 mx-6" src={assets.stripe_logo} alt="Stripe Logo" />
+						</div>
+
+						{/* Razorpay */}
+						<div onClick={() => setMethod('razorpay')}  className="flex items-center gap-3 border p-2 px-4 cursor-pointer hover:bg-gray-100 rounded-lg">
+							<p className={`w-4 h-4 border rounded-full ${method === "razorpay" ?'bg-green-400': '' }`}></p>
+							<img className="h-4 mx-4" src={assets.razorpay_logo} alt="Razorpay Logo" />
+						</div>
+
+						{/* Cash on Delivery */}
+						<div onClick={() => setMethod('cod')}  className="flex items-center gap-3 border p-2 px-4 cursor-pointer hover:bg-gray-100 rounded-lg">
+							<p className={`w-4 h-4 border rounded-full ${method === "cod" ?'bg-green-400': '' }`}></p>
+							<p className="text-gray-600 text-sm font-medium mx-4">CASH ON DELIVERY</p>
+						</div>
+					</div>
+					</div>
+					<div className='w-full text-end text-center mb-4'>
+						<button onClick={()=>navigate('/orders')} className='bg-black text-white px-16 py-3  text-sm'>PLACE ORDER</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }
